@@ -12,7 +12,8 @@ def print_menu():
     print("1. Citire date: ")
     print("2. Determinare cea mai lungă subsecvență cu proprietatea ca toate numerele sunt divizibile cu k: ")
     print("3. Determinare cea mai lungă subsecvență cu proprietatea ca Toate numerele sunt în progresie aritmetică: ")
-    print("4. Iesire")
+    print("4. Determinare cea mai lunga subsecventa cu numerele aflate in ordine crescatoare: ")
+    print("5. Iesire")
 
 
 def elemente_diviz_k(lst: list[int], k: int):
@@ -71,6 +72,12 @@ def elemente_progresie_aritmetica(lst: list[int]):
     return True
 
 
+def test_elemente_progresie_aritmetica():
+    assert elemente_progresie_aritmetica([1, 2, 3]) is True
+    assert elemente_progresie_aritmetica([1, 2, 2]) is False
+    assert elemente_progresie_aritmetica([1]) is True
+
+
 def get_longest_arithmetic_progression(lst: list[int]) -> list[int]:
     '''
     Determina cea mai lunga subsecventa cu proprietatea ca toate numerele se afla in progresie aritmetica
@@ -90,6 +97,45 @@ def test_get_longest_arithmetic_progression():
     assert get_longest_arithmetic_progression([1, 5, 3, 4]) == [1, 5]
     assert get_longest_arithmetic_progression([1]) == [1]
 
+
+def lista_crescatoare(lst: list[int]):
+    '''
+    Determina daca toate numerele dintr-o lista sunt in ordine crescatoare
+    :param lst: Lista de numere naturale
+    :return: True daca lista cupinde numerel in ordine crescatoare, False altfel
+    '''
+    for i in range(len(lst)-1):
+        if lst[i] >= lst[i+1]:
+            return False
+    return True
+
+
+def test_subsecventa_crescatoare():
+    assert lista_crescatoare([1,2,3,4]) is True
+    assert lista_crescatoare([1,2,2,4]) is False
+    assert lista_crescatoare([]) is True
+
+
+def get_longest_sorted_asc(lst: list[int]) -> list[int]:
+    '''
+    Determina cea mai lunga subsecventa ce are numerle ordonate crescator
+    :param lst: Lista de numere naturale
+    :return: Cea mai lunga subsecventa ce are numerele ordonate crescator
+    '''
+    sub_max = []
+    for i in range(len(lst)):
+        for j in range(i, len(lst)):
+            if lista_crescatoare(lst[i:j + 1]) and len(sub_max) < len(lst[i:j + 1]):
+                sub_max = lst[i:j + 1]
+    return sub_max
+
+
+def test_get_longest_sorted_asc():
+    assert get_longest_sorted_asc([1, 2, 3, 4, 3, 4]) == [1, 2, 3, 4]
+    assert get_longest_sorted_asc([1, 5, 3, 4, 3, 4]) == [1, 5]
+    assert get_longest_sorted_asc([1]) == [1]
+
+
 def main():
     lista = []
     while True:
@@ -103,10 +149,18 @@ def main():
         elif Optiune == 3:
             print('Cea mai lunga subsecventa cu numerele aflate in progresie aritmetica este' , get_longest_arithmetic_progression(lista))
         elif Optiune == 4:
+            print('Cea mai lunga subsecventa cu numerele aflate in ordine crescatoare' , get_longest_sorted_asc(lista))
+        elif Optiune == 5:
             break
+        else:
+            print("Aceasta optiune nu exista, alege alta optiune: ")
+
 
 if __name__ == '__main__':
     test_elemente_diviz_k()
     test_get_longest_div_k()
+    test_elemente_progresie_aritmetica()
     test_get_longest_arithmetic_progression()
+    test_subsecventa_crescatoare()
+    test_get_longest_sorted_asc()
     main()
